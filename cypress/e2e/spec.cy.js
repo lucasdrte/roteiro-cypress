@@ -56,4 +56,60 @@ describe('template spec', () => {
     cy.get('.todo-list li')
       .should('have.length', 2);
   });
+
+  it('Remove itens completos', () => {
+    cy.visit('http://127.0.0.1:7001/')
+
+    cy.get('.new-todo')
+    .type('TP2 de ES{enter}')
+    .type('Prova de ES{enter}');
+
+    cy.get('.todo-list li .toggle')
+    .first()
+    .click();
+
+    cy.contains('Clear completed').click();
+    cy.get('.todo-list li')
+    .should('have.length', 1)
+    .first()
+    .should('have.text', 'Prova de ES');
+  })
+
+  it('Edita uma tarefa', () => {
+    cy.visit('http://127.0.0.1:7001/')
+
+    cy.get('.new-todo')
+    .type('TP2 de ES{enter}')
+
+    cy.get('.todo-list li')
+    .first()
+    .dblclick()
+    .type('{selectAll}{backspace}Prova de ES{enter}');
+
+    cy.get('.todo-list li')
+    .should('have.length', 1)
+    .first()
+    .should('have.text', 'Prova de ES');
+  })
+
+
+it('Adiciona tarefa após remover completas', () => {
+  cy.visit('http://127.0.0.1:7001/')
+
+  cy.get('.new-todo')
+  .type('TP2 de ES{enter}')
+  .type('Prova de ES{enter}');
+
+  cy.get('.todo-list li .toggle')
+  .first()
+  .click();
+
+  cy.contains('Clear completed').click();
+
+  cy.get('.new-todo')
+  .type('Estudar refatoração{enter}')
+
+  cy.get('.todo-list li')
+  .should('have.length', 2)
+})
 });
